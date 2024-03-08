@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:hive/hive.dart';
+import 'package:mrswriter/core/data/Note.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
@@ -9,12 +10,7 @@ import 'package:path_provider/path_provider.dart';
 final QuillController __controller = QuillController.basic();
 
 
-
-
 class CreateWritePage extends StatelessWidget {
-
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,13 +114,24 @@ class CreateWritePage extends StatelessWidget {
       // );
     }
   }
-  void saveWritingInDataBase(){
-    var localBox = Hive.box("localbox");
-    localBox.put(0, 'Mith');
-    print(localBox.getAt(0));
+  Future<void> saveWritingInDataBase() async {
+    var notesWritebox = Hive.box("notesWritebox");
+    var noteWrite = Note(gelastId(notesWritebox)+1, "", "", "");
+    notesWritebox.put(gelastId(notesWritebox), noteWrite);
+    print(notesWritebox.getAt(gelastId(notesWritebox)-1));
+   // await notesWritebox.close();
   }
   void getWritingOfDataBase(){
 
+  }
+
+  int gelastId(Box box){
+    var lastRecord = null;
+    if(box.isEmpty){
+      return 0;
+    }
+    lastRecord = box.getAt(box.length - 1);
+    return lastRecord.id;
   }
   String documentToJson() {
     final json = jsonEncode(__controller.document.toDelta().toJson());

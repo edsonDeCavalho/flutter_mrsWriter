@@ -8,11 +8,13 @@ import 'package:mrswriter/style/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:mrswriter/style/theme.dart';
 
+import 'core/data/Note.dart';
+
 void main() async{
   /*Init hive*/
   await Hive.initFlutter();
-
-  var box = await Hive.openBox('localbox');
+  Hive.registerAdapter(NoteAdapter());
+  var notesWritebox = await Hive.openBox('notesWritebox');
 
   runApp(const MyApp());
 }
