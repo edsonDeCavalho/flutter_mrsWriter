@@ -1,35 +1,37 @@
 
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 import '../../core/data/Note.dart';
+import '../../core/process/HiveProcess.dart';
+
 
 class ListOfWritings extends StatefulWidget {
+  const ListOfWritings({Key? key}) : super(key: key);
+
   @override
-  _MyGridPageState createState() => _MyGridPageState();
+  _ListOfWritingsState createState() => _ListOfWritingsState();
 }
+class _ListOfWritingsState extends State<ListOfWritings> {
 
-class _MyGridPageState extends State<ListOfWritings> {
-  List<Note> items = [
-    Note(1,'Item 1', 'Description 1',""),
-    Note(2,'Item 2', 'Description 2',""),
-    Note(3,'Item 3', 'Description 3',""),
-    Note(4,'Item 4', 'Description 4',""),
-    Note(5,'Item 5', 'Description 5', ""),
-    Note(6,'Item 6', 'Description 6', ""),
-    Note(7,'Item 7', 'Description 7', ""),
-    Note(8,'Item 8', 'Description 8', ""),
-    Note(9,'Item 9', 'Description 9', ""),
+  late List<Note> allNotes; // Declare a list to store all notes
 
-  ];
+  @override
+  void initState() {
+    super.initState();
+    // Initialize allNotes with values from the box
+  //  allNotes = widget.box.values.toList();
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Grid List Example'),
+        title: Text('List of your Writings'),
       ),
       body: GridView.builder(
-        itemCount: items.length,
+        itemCount: allNotes.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 10.0,
@@ -46,10 +48,10 @@ class _MyGridPageState extends State<ListOfWritings> {
                 width: MediaQuery.of(context).size.width *
                     15,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      items[index].title,
+                      allNotes[index].title,
                       style: const TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.bold,
@@ -58,9 +60,11 @@ class _MyGridPageState extends State<ListOfWritings> {
                     ),
                     SizedBox(height: 8.0),
                     Text(
-                      items[index].description,
+                      allNotes[index].description,
+                      textAlign: TextAlign.start,
                       style: const TextStyle(
                         fontSize: 16.0,
+
                         color: Colors.white,
                       ),
                     ),
@@ -74,3 +78,4 @@ class _MyGridPageState extends State<ListOfWritings> {
     );
   }
 }
+

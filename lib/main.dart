@@ -11,17 +11,15 @@ import 'package:mrswriter/style/theme.dart';
 import 'core/data/Note.dart';
 
 void main() async{
-  /*Init hive*/
   await Hive.initFlutter();
-  Hive.registerAdapter(NoteAdapter());
-  var notesWritebox = await Hive.openBox('notesWritebox');
+  var boxHive1 = Hive.registerAdapter(NoteAdapter());
+  await Hive.openBox<Note>('notesWritebox');
 
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+  const MyApp( {super.key});
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -45,9 +43,9 @@ class MyApp extends StatelessWidget {
         '/': (context) =>   HomePage(),
         '/emptyPage' : (context) => EmptyPage(),
         '/createWriting' : (context) => CreateWritePage(),
-        '/BottomNavigationBarScreen': (context) =>   BottomNavigationBarScreen(),
-        '/ListOfWritings': (context) =>   ListOfWritings(),
-      },
+        '/BottomNavigationBarScreen': (context) =>   const BottomNavigationBarScreen(),
+        '/ListOfWritings': (context) =>  ListOfWritings(),
+        },
       debugShowCheckedModeBanner: false,
     );
   }

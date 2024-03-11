@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
+import '../../core/data/Note.dart';
 import '../../style/colors.dart';
 import '../createWritePage/createWritePage.dart';
 import '../emptyPage/emptypage.dart';
