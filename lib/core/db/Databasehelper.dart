@@ -9,13 +9,13 @@ class Databasehelper{
   }
   static Future<void> _createdatabase(Database db, int version) async{
     await db.execute('''
-    CREATE TABLE IF NOT EXISTS notes (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title TEXT,
-    description TEXT,
-    jsonfilename TEXT
-    )
-''');
+        CREATE TABLE IF NOT EXISTS notes (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT,
+        description TEXT,
+        jsonfilename TEXT
+        )
+      ''');
   }
 
   static Future<int> insertNote(String title, String description, String jsonFilename) async{
@@ -27,4 +27,13 @@ class Databasehelper{
     };
     return await db.insert('notes', data);
   }
+
+  static Future<List<Map<String, dynamic>>> getData() async {
+    final db = await _openDatabase();
+    return await db.query('notes');
+  }
+
+
+
+
 }

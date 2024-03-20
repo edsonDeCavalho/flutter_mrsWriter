@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 import '../../core/data/Note.dart';
+import '../../core/db/Databasehelper.dart';
 import '../../core/process/HiveProcess.dart';
 
 
@@ -14,13 +15,27 @@ class ListOfWritings extends StatefulWidget {
 }
 class _ListOfWritingsState extends State<ListOfWritings> {
 
-  late List<Note> allNotes; // Declare a list to store all notes
+  List<Map<String, dynamic>> allNotes = [];
 
   @override
   void initState() {
     super.initState();
-    // Initialize allNotes with values from the box
-  //  allNotes = widget.box.values.toList();
+    _fetchNotes();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _fetchNotes();
+    });
+  }
+  void _fetchNotes() async{
+    List<Map<String, dynamic>> userlist = await Databasehelper.getData();
+    setState(() {
+      allNotes = userlist;
+    });
+  }
+
+
+  @override
+  void didPushNext() {
+    _fetchNotes();
   }
 
 
@@ -29,6 +44,7 @@ class _ListOfWritingsState extends State<ListOfWritings> {
     return Scaffold(
       appBar: AppBar(
         title: Text('List of your Writings'),
+        automaticallyImplyLeading: false,
       ),
       body: GridView.builder(
         itemCount: allNotes.length,
@@ -51,7 +67,7 @@ class _ListOfWritingsState extends State<ListOfWritings> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      allNotes[index].title,
+                      allNotes[index]['title'],
                       style: const TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.bold,
@@ -60,7 +76,7 @@ class _ListOfWritingsState extends State<ListOfWritings> {
                     ),
                     SizedBox(height: 8.0),
                     Text(
-                      allNotes[index].description,
+                      allNotes[index]['description'],
                       textAlign: TextAlign.start,
                       style: const TextStyle(
                         fontSize: 16.0,
@@ -78,4 +94,6 @@ class _ListOfWritingsState extends State<ListOfWritings> {
     );
   }
 }
+
+
 

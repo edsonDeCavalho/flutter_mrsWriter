@@ -132,6 +132,8 @@ class CreateWritePage extends StatelessWidget {
     print(insertId);
 
   }
+
+
   void getWritingOfDataBase(){
 
   }
