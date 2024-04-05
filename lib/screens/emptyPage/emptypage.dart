@@ -14,7 +14,7 @@ class EmptyPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text('z'
+            const Text(
               'Empty page',
               style: TextStyle(
                 fontSize: 32.0,

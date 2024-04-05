@@ -45,7 +45,7 @@ class CreateWritePage extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 20),
             Expanded(
               child: Padding(
                 padding: EdgeInsets.all(8.0),
@@ -126,11 +126,10 @@ class CreateWritePage extends StatelessWidget {
     // var noteWrite = Note(gelastId(notesWritebox)+1, titlecontroller.text, getFirstWords(__controller), "");
     // notesWritebox.put(gelastId(notesWritebox), noteWrite);
     // print(notesWritebox.getAt(gelastId(notesWritebox)-1));
+    DateTime now = DateTime.now();
 
-
-    int insertId = await Databasehelper.insertNote(titlecontroller.text, "test", "jsonFilename");
+    int insertId = await Databasehelper.insertNote(titlecontroller.text, "test", titlecontroller.text+"jsonFilename");
     print(insertId);
-
   }
 
 

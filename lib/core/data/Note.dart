@@ -27,13 +27,13 @@ class NoteAdapter extends TypeAdapter<Note> {
     final description = reader.readString();
     final jsonFilename = reader.readString();
     return Note(id, title, description, jsonFilename);
-  }
+}
 
   @override
   void write(BinaryWriter writer, Note obj) {
     writer.writeInt(obj.id);
-    writer.writeString(obj.title);
-    writer.writeString(obj.description);
+          writer.writeString(obj.title);
+          writer.writeString(obj.description);
     writer.writeString(obj.jsonFilename);
   }
 }

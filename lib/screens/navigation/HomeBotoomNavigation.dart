@@ -19,7 +19,9 @@ class _BottomNavigationBarState extends State {
   int _selectedIndex = 0;
   List<Widget> pageList = [
     EmptyPage(),
-    ListOfWritings()
+    EmptyPage(),
+    ListOfWritings(),
+    EmptyPage()
   ];
   void _onItemTapped(int index) {
     setState(() {
@@ -44,28 +46,22 @@ class _BottomNavigationBarState extends State {
         child: BottomNavigationBar(
           backgroundColor: AppColor.backgroundWhite,
           type: BottomNavigationBarType.fixed,
-          items: <BottomNavigationBarItem>[
+          items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Container(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
-                //child: Image.asset('images/bottomBarNav/Home.png'),
-              ),
-              activeIcon: Container(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
-                //child: Image.asset('images/bottomBarNav/HomeActive.png'),
-              ),
+              icon: Icon(Icons.menu_book_outlined), // Add icon for Accueil
               label: "Accueil",
             ),
             BottomNavigationBarItem(
-              icon: Container(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
-                //child: Image.asset('images/bottomBarNav/Home.png'),
-              ),
-              activeIcon: Container(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
-                //child: Image.asset('images/bottomBarNav/HomeActive.png'),
-              ),
+              icon: Icon(Icons.science), // Add icon for WritePad
               label: "WritePad",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.explore), // Add icon for Account
+              label: "Writings",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle), // Add icon for Account (active)
+              label: "Account",
             ),
           ],
           currentIndex: _selectedIndex,
@@ -82,17 +78,17 @@ class _BottomNavigationBarState extends State {
       resizeToAvoidBottomInset: false,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: SizedBox(
-        width: 70,
-        height: 70,
+        width: 55,
+        height: 55,
         child: FittedBox(
           child: FloatingActionButton(
             onPressed: () {
               Navigator.pushNamed(context, '/createWriting');
             },
             backgroundColor: AppColor.primary5,
-            elevation: 1,
-            child: Icon(
-              Icons.insert_drive_file,
+            elevation: 3,
+            child: const Icon(
+              Icons.create,
               size: 35,
               color: Colors.white, // Customize the color if needed
             ),
