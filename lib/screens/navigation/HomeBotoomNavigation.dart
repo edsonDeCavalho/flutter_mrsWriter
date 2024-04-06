@@ -3,6 +3,7 @@ import 'package:hive/hive.dart';
 
 import '../../core/data/Note.dart';
 import '../../style/colors.dart';
+import '../accueil/accueilPage.dart';
 import '../createWritePage/createWritePage.dart';
 import '../emptyPage/emptypage.dart';
 import '../listOfWritings/listOfWritings.dart';
@@ -18,7 +19,7 @@ class BottomNavigationBarScreen extends StatefulWidget {
 class _BottomNavigationBarState extends State {
   int _selectedIndex = 0;
   List<Widget> pageList = [
-    EmptyPage(),
+    AccueilPage(),
     EmptyPage(),
     ListOfWritings(),
     EmptyPage()
