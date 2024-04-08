@@ -1,8 +1,5 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
-import 'package:hive/hive.dart';
-import 'package:mrswriter/core/data/Note.dart';
 import 'package:mrswriter/core/db/Databasehelper.dart';
 import 'dart:convert';
 import 'dart:io';
@@ -12,10 +9,15 @@ import '../../core/process/HiveProcess.dart';
 
 final QuillController __controller = QuillController.basic();
 var actualNote = null;
-
+var userId = "";
 
 class CreateWritePage extends StatelessWidget {
-  final titlecontroller = TextEditingController();
+  final TextEditingController titleController;
+  final int? id;
+
+
+  CreateWritePage({Key? key, this.id, required this.titleController})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,7 @@ class CreateWritePage extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.save),
             onPressed: () {
-                saveWritingInDataBase();
+              saveWritingInDataBase();
               _saveDocument(context);
             },
           ),
@@ -38,7 +40,7 @@ class CreateWritePage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
               child: TextFormField(
-                controller: titlecontroller,
+                controller: titleController,
                 decoration: const InputDecoration(
                   border: InputBorder.none,
                   labelText: 'Title',
@@ -50,6 +52,7 @@ class CreateWritePage extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.all(8.0),
                 child: QuillEditor.basic(
+                  // Remove controller from here
                   configurations: QuillEditorConfigurations(
                     controller: __controller,
                     readOnly: false,
@@ -87,7 +90,6 @@ class CreateWritePage extends StatelessWidget {
                       attribute: Attribute.bold,
                     ),
                     // Other toolbar buttons...
-
                   ],
                 ),
               ),
@@ -102,8 +104,19 @@ class CreateWritePage extends StatelessWidget {
   Future<void> _saveDocument(BuildContext context) async {
     try {
       final String jsonData = documentToJson();
-      final Directory appDocumentsDirectory = await getApplicationDocumentsDirectory();
-      final String filePath = '${appDocumentsDirectory.path}/quill_document.json';
+      final Directory appDocumentsDirectory =
+      await getApplicationDocumentsDirectory();
+      DateTime now = DateTime.now();
+      final String filePath = appDocumentsDirectory.path +
+          "/" +
+          titleController.text +
+          "_" +
+          now.day.toString() +
+          "_" +
+          now.month.toString() +
+          "_" +
+          now.year.toString() +
+          ".json";
       final File file = File(filePath);
       await file.writeAsString(jsonData);
       print('Document saved successfully at: $filePath');
@@ -121,30 +134,22 @@ class CreateWritePage extends StatelessWidget {
       );
     }
   }
-  Future<void> saveWritingInDataBase() async {
-    // var notesWritebox = Hive.box("notesWritebox");
-    // var noteWrite = Note(gelastId(notesWritebox)+1, titlecontroller.text, getFirstWords(__controller), "");
-    // notesWritebox.put(gelastId(notesWritebox), noteWrite);
-    // print(notesWritebox.getAt(gelastId(notesWritebox)-1));
-    DateTime now = DateTime.now();
 
-    int insertId = await Databasehelper.insertNote(titlecontroller.text, "test", titlecontroller.text+"jsonFilename");
+  Future<void> saveWritingInDataBase() async {
+    DateTime now = DateTime.now();
+    String fileName = titleController.text + now.toString() + ".json";
+    if (id != null) {
+      fileName = "$id-$fileName";
+    }
+    int insertId = await Databasehelper.insertNote(
+        titleController.text, getFirstWords(__controller), fileName);
     print(insertId);
   }
 
-
-  void getWritingOfDataBase(){
-
-  }
-
-  String getFirstWords(QuillController controller){
-  // To get the text from the Quill editor
+  String getFirstWords(QuillController controller) {
     String text = controller.document.toPlainText();
-  // To split the text into words
     List<String> words = text.split(' ');
-  // To get the first 15 words
     List<String> first15Words = words.take(15).toList();
-  // To join the first 15 words back into a single string
     String first15WordsString = first15Words.join(' ');
     return first15WordsString;
   }

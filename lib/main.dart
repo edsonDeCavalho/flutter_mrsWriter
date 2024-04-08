@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
 
         '/': (context) =>   HomePage(),
         '/emptyPage' : (context) => EmptyPage(),
-        '/createWriting' : (context) => CreateWritePage(),
+        '/createWriting' : (context) =>CreateWritePage(titleController: TextEditingController(), id: null),
         '/BottomNavigationBarScreen': (context) =>   const BottomNavigationBarScreen(),
         '/ListOfWritings': (context) =>  ListOfWritings(),
         },
