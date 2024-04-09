@@ -1,3 +1,4 @@
+// Inside ListOfWritings.dart
 
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -22,7 +23,7 @@ class _ListOfWritingsState extends State<ListOfWritings> {
   void initState() {
     super.initState();
     _fetchNotes();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
       _fetchNotes();
     });
   }
@@ -39,6 +40,10 @@ class _ListOfWritingsState extends State<ListOfWritings> {
     _fetchNotes();
   }
 
+  void _handleNoteItemTap(int index) {
+    // Handle tap event here, e.g., navigate to detail page
+    print('Note item tapped: $index');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +65,7 @@ class _ListOfWritingsState extends State<ListOfWritings> {
           return NoteItem(
             title: allNotes[index]['title'],
             description: allNotes[index]['description'],
+            onTap: () => _handleNoteItemTap(index), // Pass callback function
           );
         },
       ),
@@ -67,6 +73,3 @@ class _ListOfWritingsState extends State<ListOfWritings> {
     );
   }
 }
-
-
-
