@@ -15,7 +15,6 @@ class CreateWritePage extends StatelessWidget {
   final TextEditingController titleController;
   final int? id;
 
-
   CreateWritePage({Key? key, this.id, required this.titleController})
       : super(key: key);
 
