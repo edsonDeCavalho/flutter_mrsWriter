@@ -7,6 +7,7 @@ import '../../components/NotesItem/NotesItem.dart';
 import '../../core/data/Note.dart';
 import '../../core/db/Databasehelper.dart';
 import '../../core/process/HiveProcess.dart';
+import 'dart:developer' as developer;
 
 
 class ListOfWritings extends StatefulWidget {
@@ -41,8 +42,8 @@ class _ListOfWritingsState extends State<ListOfWritings> {
   }
 
   void _handleNoteItemTap(int index) {
-    // Handle tap event here, e.g., navigate to detail page
-    print('Note item tapped: $index');
+    developer.log("Note $index selected", name: 'listOfWritings');
+    Navigator.pushNamed(context, '/createWriting', arguments: index);
   }
 
   @override
