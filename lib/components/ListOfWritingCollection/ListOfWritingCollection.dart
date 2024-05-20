@@ -49,7 +49,7 @@ class MiniCollectionList extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) {
         final data = miniCollectionData[index];
         return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 11.0),
+          padding: const EdgeInsets.symmetric(vertical: 15.0,horizontal: 11.0),
           child: WritingCollection(
             imageUrl: data['imageUrl'],
             strings: List<String>.from(data['strings']),

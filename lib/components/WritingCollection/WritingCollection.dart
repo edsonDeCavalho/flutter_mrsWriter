@@ -19,8 +19,8 @@ class WritingCollection extends StatelessWidget {
               borderRadius: BorderRadius.circular(12.0), // Adjust the radius as needed
               child: Image.network(
                 imageUrl,
-                width: 80,
-                height: 80,
+                width: 180,
+                height: 180,
                 fit: BoxFit.cover,
               ),
             ),
@@ -28,7 +28,7 @@ class WritingCollection extends StatelessWidget {
           // Strings in a column next to the image
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [Text("Title"),Text("Hello"),Text("Last update : ")]
+            children: [Text("Title"),SizedBox(height: 60),Text("Hello"),Text("Last update : ")]
           ),
         ],
       ),

@@ -3,6 +3,7 @@ import 'package:hive/hive.dart';
 
 import '../../core/data/Note.dart';
 import '../../style/colors.dart';
+import '../account/accountPage.dart';
 import '../accueil/accueilPage.dart';
 import '../createWritePage/createWritePage.dart';
 import '../emptyPage/emptypage.dart';
@@ -22,7 +23,7 @@ class _BottomNavigationBarState extends State {
     AccueilPage(),
     EmptyPage(),
     ListOfWritings(),
-    EmptyPage()
+    AccountPage()
   ];
   void _onItemTapped(int index) {
     setState(() {

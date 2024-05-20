@@ -1,4 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:mrswriter/screens/account/accountPage.dart';
 import 'package:mrswriter/screens/createWritePage/createWritePage.dart';
 import 'package:mrswriter/screens/emptyPage/emptypage.dart';
 import 'package:mrswriter/screens/listOfWritings/listOfWritings.dart';
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
         '/createWriting' : (context) =>CreateWritePage(titleController: TextEditingController(), id: null),
         '/BottomNavigationBarScreen': (context) =>   const BottomNavigationBarScreen(),
         '/ListOfWritings': (context) =>  ListOfWritings(),
+        '/account': (context) =>  AccountPage(),
         },
       debugShowCheckedModeBanner: false,
     );

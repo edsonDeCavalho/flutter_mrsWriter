@@ -1,6 +1,7 @@
 // Inside NoteItem.dart file
 
 import 'package:flutter/material.dart';
+import 'package:mrswriter/core/tools/String/StringTools.dart';
 
 class NoteItem extends StatelessWidget {
   final String title;
@@ -23,8 +24,9 @@ class NoteItem extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+
               Text(
-                title,
+               StringTools.remove_Remplace(title),
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:mrswriter/core/db/Databasehelper.dart';
+import 'package:mrswriter/core/tools/String/StringTools.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
@@ -107,8 +108,8 @@ class CreateWritePage extends StatelessWidget {
       await getApplicationDocumentsDirectory();
       DateTime now = DateTime.now();
       final String filePath = appDocumentsDirectory.path +
-          "/" +
-          titleController.text +
+          "/"
+           + getTitletoStore() +
           "_" +
           now.day.toString() +
           "_" +
@@ -140,21 +141,24 @@ class CreateWritePage extends StatelessWidget {
     if (id != null) {
       fileName = "$id-$fileName";
     }
+    String text = __controller.document.toPlainText();
     int insertId = await Databasehelper.insertNote(
-        titleController.text, getFirstWords(__controller), fileName);
+        getTitletoStore(), StringTools.getFirstWords(text,15), fileName);
+
     print(insertId);
   }
 
-  String getFirstWords(QuillController controller) {
-    String text = controller.document.toPlainText();
-    List<String> words = text.split(' ');
-    List<String> first15Words = words.take(15).toList();
-    String first15WordsString = first15Words.join(' ');
-    return first15WordsString;
-  }
+
 
   String documentToJson() {
     final json = jsonEncode(__controller.document.toDelta().toJson());
     return json;
+  }
+  String getTitletoStore(){
+    if(titleController.text.isEmpty){
+      return  StringTools.removeSpaceAndRemplace(StringTools.getFirstWords(__controller.document.toPlainText(),2));
+    }else{
+      return StringTools.removeSpaceAndRemplace(titleController.text);
+    }
   }
 }
