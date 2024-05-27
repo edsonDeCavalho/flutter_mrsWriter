@@ -48,7 +48,11 @@ class _ListOfWritingsState extends State<ListOfWritings> {
     if (selectedIndices.isEmpty) {
       // Navigate to another page if no item is selected
       developer.log("Note $index tapped", name: 'listOfWritings');
-      Navigator.pushNamed(context, '/createWriting', arguments: index);
+      Navigator.pushNamed(
+        context,
+        '/createWriting',
+        arguments: {'id': allNotes[index]['id']},
+      );
     } else {
       // Toggle selection if some items are already selected
       setState(() {

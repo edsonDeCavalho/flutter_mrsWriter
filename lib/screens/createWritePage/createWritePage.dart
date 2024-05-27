@@ -13,14 +13,17 @@ var actualNote = null;
 var userId = "";
 
 class CreateWritePage extends StatelessWidget {
-  final TextEditingController titleController;
+  final TextEditingController titleController = TextEditingController();
   final int? id;
 
-  CreateWritePage({Key? key, this.id, required this.titleController})
-      : super(key: key);
+  CreateWritePage({Key? key, this.id}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final Map<String, dynamic> arguments = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final int? noteId = arguments['id'];
+    print(noteId);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Create a writing'),
@@ -28,8 +31,8 @@ class CreateWritePage extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.save),
             onPressed: () {
-              saveWritingInDataBase();
-              _saveDocument(context);
+              saveWritingInDataBase(noteId);
+              _saveDocument(context, noteId);
             },
           ),
         ],
@@ -52,7 +55,6 @@ class CreateWritePage extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.all(8.0),
                 child: QuillEditor.basic(
-                  // Remove controller from here
                   configurations: QuillEditorConfigurations(
                     controller: __controller,
                     readOnly: false,
@@ -101,15 +103,14 @@ class CreateWritePage extends StatelessWidget {
     );
   }
 
-  Future<void> _saveDocument(BuildContext context) async {
+  Future<void> _saveDocument(BuildContext context, int? noteId) async {
     try {
       final String jsonData = documentToJson();
-      final Directory appDocumentsDirectory =
-      await getApplicationDocumentsDirectory();
+      final Directory appDocumentsDirectory = await getApplicationDocumentsDirectory();
       DateTime now = DateTime.now();
       final String filePath = appDocumentsDirectory.path +
-          "/"
-           + getTitletoStore() +
+          "/" +
+          getTitletoStore() +
           "_" +
           now.day.toString() +
           "_" +
@@ -135,29 +136,28 @@ class CreateWritePage extends StatelessWidget {
     }
   }
 
-  Future<void> saveWritingInDataBase() async {
+  Future<void> saveWritingInDataBase(int? noteId) async {
     DateTime now = DateTime.now();
     String fileName = titleController.text + now.toString() + ".json";
-    if (id != null) {
-      fileName = "$id-$fileName";
+    if (noteId != null) {
+      fileName = "$noteId-$fileName";
     }
     String text = __controller.document.toPlainText();
     int insertId = await Databasehelper.insertNote(
-        getTitletoStore(), StringTools.getFirstWords(text,15), fileName);
+        getTitletoStore(), StringTools.getFirstWords(text, 15), fileName);
 
     print(insertId);
   }
-
-
 
   String documentToJson() {
     final json = jsonEncode(__controller.document.toDelta().toJson());
     return json;
   }
-  String getTitletoStore(){
-    if(titleController.text.isEmpty){
-      return  StringTools.removeSpaceAndRemplace(StringTools.getFirstWords(__controller.document.toPlainText(),2));
-    }else{
+
+  String getTitletoStore() {
+    if (titleController.text.isEmpty) {
+      return StringTools.removeSpaceAndRemplace(StringTools.getFirstWords(__controller.document.toPlainText(), 2));
+    } else {
       return StringTools.removeSpaceAndRemplace(titleController.text);
     }
   }
