@@ -11,14 +11,19 @@ import '../../core/process/HiveProcess.dart';
 final QuillController __controller = QuillController.basic();
 var actualNote = null;
 var userId = "";
-var noteId=0;
-var filename="";
 
-class CreateWritePage extends StatelessWidget {
+class EditWritePage extends StatelessWidget {
   final TextEditingController titleController = TextEditingController();
+  final int? id;
+
+  EditWritePage({Key? key, this.id}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final Map<String, dynamic> arguments = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final int? noteId = arguments['id'];
+    print(noteId);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Create a writing'),
@@ -26,8 +31,8 @@ class CreateWritePage extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.save),
             onPressed: () {
-              _saveDocument(context, noteId);
               saveWritingInDataBase(noteId);
+              _saveDocument(context, noteId);
             },
           ),
         ],
@@ -86,57 +91,6 @@ class CreateWritePage extends StatelessWidget {
                       controller: __controller,
                       attribute: Attribute.bold,
                     ),
-                    QuillToolbarToggleStyleButton(
-                      options: const QuillToolbarToggleStyleButtonOptions(),
-                      controller: __controller,
-                      attribute: Attribute.italic,
-                    ),
-                    QuillToolbarToggleStyleButton(
-                      controller: __controller,
-                      attribute: Attribute.underline,
-                    ),
-                    QuillToolbarClearFormatButton(
-                      controller: __controller,
-                    ),
-                    const VerticalDivider(),
-                    QuillToolbarColorButton(
-                      controller: __controller,
-                      isBackground: false,
-                    ),
-                    QuillToolbarColorButton(
-                      controller: __controller,
-                      isBackground: true,
-                    ),
-                    const VerticalDivider(),
-
-                    const VerticalDivider(),
-                    QuillToolbarToggleCheckListButton(
-                      controller: __controller,
-                    ),
-                    QuillToolbarToggleStyleButton(
-                      controller: __controller,
-                      attribute: Attribute.ol,
-                    ),
-                    QuillToolbarToggleStyleButton(
-                      controller: __controller,
-                      attribute: Attribute.ul,
-                    ),
-                    QuillToolbarToggleStyleButton(
-                      controller: __controller,
-                      attribute: Attribute.inlineCode,
-                    ),
-                    QuillToolbarToggleStyleButton(
-                      controller: __controller,
-                      attribute: Attribute.blockQuote,
-                    ),
-                    QuillToolbarIndentButton(
-                      controller: __controller,
-                      isIncrease: true,
-                    ),
-                    QuillToolbarIndentButton(
-                      controller: __controller,
-                      isIncrease: false,
-                    ),
                     // Other toolbar buttons...
                   ],
                 ),
@@ -154,12 +108,19 @@ class CreateWritePage extends StatelessWidget {
       final String jsonData = documentToJson();
       final Directory appDocumentsDirectory = await getApplicationDocumentsDirectory();
       DateTime now = DateTime.now();
-      filename = "${getTitletoStore()}_${now.day}_${now.month}_${now.year}.json";
-      final String filepath = appDocumentsDirectory.path + "/"+ filename;
-
-      final File file = File(filepath);
+      final String filePath = appDocumentsDirectory.path +
+          "/" +
+          getTitletoStore() +
+          "_" +
+          now.day.toString() +
+          "_" +
+          now.month.toString() +
+          "_" +
+          now.year.toString() +
+          ".json";
+      final File file = File(filePath);
       await file.writeAsString(jsonData);
-      print('Document saved successfully at: $filepath');
+      print('Document saved successfully at: $filePath');
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Document saved successfully'),
@@ -176,10 +137,16 @@ class CreateWritePage extends StatelessWidget {
   }
 
   Future<void> saveWritingInDataBase(int? noteId) async {
+    DateTime now = DateTime.now();
+    String fileName = titleController.text + now.toString() + ".json";
+    if (noteId != null) {
+      fileName = "$noteId-$fileName";
+    }
     String text = __controller.document.toPlainText();
-    noteId = await Databasehelper.insertNote(
-        getTitletoStore(), StringTools.getFirstWords(text, 15), filename);
-    print("Creation of a new Write with the id :$noteId");
+    int insertId = await Databasehelper.insertNote(
+        getTitletoStore(), StringTools.getFirstWords(text, 15), fileName);
+
+    print(insertId);
   }
 
   String documentToJson() {
