@@ -29,9 +29,29 @@ class Databasehelper {
     return await db.insert('notes', data);
   }
 
+  /**
+   * Gets all the notes from the db
+   */
   static Future<List<Map<String, dynamic>>> getData() async {
     final db = await _openDatabase();
     return await db.query('notes');
+  }
+
+  /**
+   *
+   */
+  static Future<Map<String, dynamic>?> getNoteById(int id) async {
+    final db = await _openDatabase();
+    final List<Map<String, dynamic>> result = await db.query(
+      'notes',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+    if (result.isNotEmpty) {
+      return result.first;
+    } else {
+      return null; // Note with the specified ID not found
+    }
   }
 
   static Future<int> deleteNoteById(int id) async {

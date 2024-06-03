@@ -50,7 +50,7 @@ class _ListOfWritingsState extends State<ListOfWritings> {
       developer.log("Note $index tapped", name: 'listOfWritings');
       Navigator.pushNamed(
         context,
-        '/createWriting',
+        '/editWriting',
         arguments: {'id': allNotes[index]['id']},
       );
     } else {

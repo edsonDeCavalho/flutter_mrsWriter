@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:mrswriter/core/data/Note.dart';
 import 'package:mrswriter/core/db/Databasehelper.dart';
 import 'package:mrswriter/core/tools/String/StringTools.dart';
+import 'package:mrswriter/screens/createWritePage/createWritePage.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
@@ -9,9 +11,8 @@ import 'package:path_provider/path_provider.dart';
 import '../../core/process/HiveProcess.dart';
 
 final QuillController __controller = QuillController.basic();
-var actualNote = null;
+var actualNote;
 var userId = "";
-
 class EditWritePage extends StatelessWidget {
   final TextEditingController titleController = TextEditingController();
   final int? id;
@@ -22,11 +23,13 @@ class EditWritePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final Map<String, dynamic> arguments = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final int? noteId = arguments['id'];
-    print(noteId);
+    setActualNote(noteId!);
+    print("Edit note page: editing note : $noteId");
+
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create a writing'),
+        title: Text('Edit a writing'),
         actions: [
           IconButton(
             icon: Icon(Icons.save),
@@ -46,7 +49,7 @@ class EditWritePage extends StatelessWidget {
                 controller: titleController,
                 decoration: const InputDecoration(
                   border: InputBorder.none,
-                  labelText: 'Title',
+                  labelText: 'title',
                 ),
               ),
             ),
@@ -160,5 +163,14 @@ class EditWritePage extends StatelessWidget {
     } else {
       return StringTools.removeSpaceAndRemplace(titleController.text);
     }
+  }
+
+  /**
+   * Gets the note by id and set the actual
+   * note.
+   */
+  Future<void> setActualNote(int noteid) async {
+    actualNote = await  Databasehelper.getNoteById(noteid);
+    print(actualNote);
   }
 }
